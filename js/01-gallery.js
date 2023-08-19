@@ -22,35 +22,30 @@ const renderList = (arr) =>
 
 galleryList.insertAdjacentHTML("beforeend", renderList(galleryItems));
 
-galleryList.addEventListener("click", handleListClick)
+galleryList.addEventListener("click", handleListClick);
 
 function handleListClick(evt) {
-    evt.preventDefault()
+  evt.preventDefault();
 
-    if(evt.currentTarget===evt.target){
-        return;
-    }    
-    const imgEl = evt.target.alt
-    const imgUrl = galleryItems.find((item)=> item.description===imgEl)
+  if (evt.currentTarget === evt.target) {
+    return;
+  }
+  const imgEl = evt.target.alt;
+  const imgUrl = galleryItems.find((item) => item.description === imgEl);
 
-    const modalListance = basicLightbox
-    .create(`
+  const modalListance = basicLightbox.create(`
     <li class="gallery__item">
         <img class="gallery__image" src="${imgUrl.original}" alt="${imgUrl.description}"/>
         </li>
-    `)
-    modalListance.show()
+    `);
+  modalListance.show();
 
-    const modal = document.querySelector(".basicLightbox")
-    modal.addEventListener("click", ()=>{
-        modalListance.close()
-        modal.removeEventListener
-    })
+  document.addEventListener("keydown", onEscClose);
 
-    window.addEventListener("keydown", (e)=> {
-        if(e.code === "Escape"){
-            modalListance.close()
-            modal.removeEventListener
-        }
-    })
+  function onEscClose(e) {
+    if (e.code === "Escape") {
+      modalListance.close();
+      document.removeEventListener("keydown", onEscClose);
+    }
+  }
 }
